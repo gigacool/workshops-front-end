@@ -13,7 +13,7 @@ const authMiddleware = (req, res, next) => {
     next();
   } 
   catch (err) {
-    res.status(401).send('Invalid token');
+    res.status(401).send('Invalid token, check your header<br/> Expect Authorization -> Bearer ${token}');
   }
 };
 

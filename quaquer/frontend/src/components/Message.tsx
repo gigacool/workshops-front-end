@@ -19,9 +19,12 @@ const Quack: React.FC<{quack:IQuack}> = ({quack}) => {
 }
 
 const Messages: React.FC<{data:IQuack[]}> = ({data}) => (
+    <>
+    
     <div className={style.messages}>
         {data.map((quack)=>(<Quack key={quack.key} quack={quack}/>))}
     </div>
+    </>
 
 );
 

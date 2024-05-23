@@ -9,7 +9,10 @@ exports.getUserProfile = async (req, res) => {
     }
     res.json({
       isSelf: req.user.id == user._id.toString() ? true:undefined,
-      username: user.username
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      birthDate: user.birthDate
     });
   } catch (error) {
     res.status(500).send(error.message);

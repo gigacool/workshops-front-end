@@ -3,8 +3,18 @@ const userGenerator = require('./user-generator');
 
 const BASE_URL = 'http://localhost:3000/api'; // Adjust the URL if necessary
 
-const users = [...Array(4)].map(() => { return { 
-    username: userGenerator.generateRandomName(), 
+function randInterval(min, max){
+  return min + Math.floor(Math.random() *(max-min+1));
+}
+
+const users = [...Array(4)].map(() => { 
+  let user = userGenerator.generateRandomName();
+  // may lead to inconsistencies but we don't really care at this point - it is more about providing examples
+
+  return {
+    ...user, 
+    birthDate: new Date(randInterval(1970, 2024), randInterval(1,12), randInterval(1, 28)).getTime(),
+    username: `${user.firstName}-${user.lastName}`, 
     password: userGenerator.generateRandomPassword()}}
 );
 
@@ -39,6 +49,7 @@ const getUserProfile = async (userId, token) => {
         'Authorization': `Bearer ${token}`
       }
     });
+    response.data.birthDate = new Date(response.data.birthDate);
     console.log(`User profile for userId ${userId}:`, response.data);
   } catch (error) {
     console.error(`Error fetching profile for userId ${userId}: ${error.response ? error.response.data : error.message}`);
@@ -111,7 +122,7 @@ const main = async () => {
   const token = await getToken(users[0]);
   const quacks = await getQuacks(token);
 
-  // console.log(JSON.stringify(quacks.data, null, 2));
+  console.log(JSON.stringify(quacks.data, null, 2));
 
 };
 

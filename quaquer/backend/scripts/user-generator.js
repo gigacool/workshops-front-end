@@ -18,9 +18,10 @@ const getRandomElement = (array) => {
 };
 
 const generateRandomName = () => {
-  const firstName = getRandomElement(firstNames);
-  const lastName = getRandomElement(lastNames);
-  return `${firstName}-${lastName}`;
+  return {
+    firstName: getRandomElement(firstNames),
+    lastName: getRandomElement(lastNames),
+  }
 };
 
 // passwords

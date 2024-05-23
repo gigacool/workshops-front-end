@@ -1,12 +1,21 @@
 const { hash, compare } = require('bcryptjs');
 const User = require('../models/user');
 const { generateToken } = require('../utils/jwtUtils');
+const { generateGUID } = require('../utils/utils');
 
 exports.register = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { firstName, lastName, username, password, birthDate } = req.body;
     const hashedPassword = await hash(password, 10);
-    const user = new User({ username, password: hashedPassword });
+    const identifier = generateGUID();
+    const user = new User({ 
+      birthDate,
+      firstName,
+      lastName,
+      username,
+      identifier, 
+      password: hashedPassword 
+    });
     await user.save();
 
     res.json({ token: generateToken(user)});

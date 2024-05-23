@@ -8,6 +8,7 @@ How will we do it ?
 - create a front-end app in the current folder
     - use [https://vitejs.dev/](vite) to fast track the project bootstrap
     - use [https://react.dev/](React) ecosystem for the components design
+    - use [https://reactrouter.com/](React router)
     - use [https://ant.design](ant.design) as a ready to go "design system"
     - use [https://jestjs.io/](jest) for unit testing
     - use [https://www.cypress.io/](cypress) for end-to-end testing of the UI
@@ -22,3 +23,24 @@ You are a front-end dev mentor with > 20 years experience in front-end developpe
 For the answers you will provide, please use simple vocabulary in a pedagogic way. Please provide documentation references, tutorials or books so I can explore deeper. 
 ``` 
 
+## Setup 
+
+### Create project
+
+In the current folder (./quaquer):
+
+```bash
+npm create vite@latest frontend -- --template react-ts
+cd frontend
+npm install
+nmp run dev
+```
+
+Voila, you have a working react / typescript front-end web app accessible from default url [http://localhost:5173](http://localhost:5173)
+
+### Add dependencies we will be using
+
+```bash
+npm install antd    
+npm install --save-dev jest ts-jest @types/jest @testing-library/react
+``` 

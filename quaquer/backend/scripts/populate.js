@@ -7,7 +7,7 @@ function randInterval(min, max){
   return min + Math.floor(Math.random() *(max-min+1));
 }
 
-const users = [...Array(4)].map(() => { 
+const users = [...Array(1)].map(() => { 
   let user = userGenerator.generateRandomName();
   // may lead to inconsistencies but we don't really care at this point - it is more about providing examples
 
@@ -40,11 +40,25 @@ const getToken = async (user) => {
   }
 };
 
+const getSelfProfile = async(token) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users/profile`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    response.data.birthDate = new Date(response.data.birthDate);
+    console.log(`User profile for self:`, response.data);
+  }
+  catch(error){
+    console.log(`Error while fetching logged user profile ${error.message}`);
+  }
+}
 
 const getUserProfile = async (userId, token) => {
   try {
     // get user profile
-    const response = await axios.get(`${BASE_URL}/users/${userId}`, {
+    const response = await axios.get(`${BASE_URL}/users/profile/${userId}`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -88,6 +102,7 @@ const main = async () => {
 
   for (const user of users) {
     await registerUser(user);
+    console.log(user.username, user.password);
   }
   
   const quotes = [
@@ -108,9 +123,8 @@ const main = async () => {
 
   for (const user of users) {
     const token = await getToken(user);
-
-    
-    const profile = await getUserProfile(user.username, token);
+    const profile = await getUserProfile(users[0].username, token);
+    const self = await getSelfProfile(token);
     
     postMessage(token, quotes[index++]);
     

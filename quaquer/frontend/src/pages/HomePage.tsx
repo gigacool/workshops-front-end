@@ -1,4 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import Message from '../components/Message';
+
+import { Typography } from 'antd';
+import { Flex, Layout , Skeleton } from 'antd';
+
+import './index.css';
+
+const { Title } = Typography;
+const { Header, Footer, Content} = Layout;
 
 
 interface IAuthor {
@@ -12,8 +21,46 @@ interface IDataItem {
   author:IAuthor
 }
 
+interface IQuack {
+    key: string,
+    content: string,
+    author: string
+}
+
+const layoutStyle:React.CSSProperties = {
+    overflow:'auto',
+    margin:'0 auto',
+    width:'100%',
+    maxWidth:540
+}
+
+const headerStyle:React.CSSProperties = {
+    textAlign:'center',
+    padding:'0',
+    color:'#666',
+    backgroundColor:'#fff',
+    height:160
+}
+
+const contentStyle:React.CSSProperties = {
+    textAlign:'center',
+    padding:'0',
+    color:'#666',
+    backgroundColor:'#fff',
+    minHeight:600,
+}
+
+
+
+const style:React.CSSProperties = {
+    textAlign:'center',
+}
+
+
+
+
 const HomePage: React.FC = () => {
-  const [data, setData] = useState<IDataItem[]>([]);
+  const [data, setData] = useState<IQuack[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,9 +68,14 @@ const HomePage: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await fetch('/api/quacks');
-        const data = await response.json();
-        console.log(data);
-        setData(data);
+        const data:IDataItem[] = await response.json();
+        setData(data.map((item):IQuack => {
+            return {
+                key: item._id,
+                content: item.content,
+                author: item.author.username
+            }
+        }))
         setLoading(false);
       } catch (err) {
         setError('Error fetching data');
@@ -34,27 +86,30 @@ const HomePage: React.FC = () => {
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+
 
   if (error) {
     return <div>{error}</div>;
   }
 
   return (
-    <div>
-      <h2>Home</h2>
-      <p>Welcome to the home page!</p>
-      <ul>
-        {data.map(item => (
-          <li key={item._id}>
-            <div>{item.content}</div>
-            <div>{item.author.username}</div>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Flex gap="middle" wrap>
+        <Layout style={layoutStyle}>
+            <Header style={headerStyle}>
+                <Title>Quacker</Title>
+                <h4>The place to quack</h4>
+            </Header>
+            <Content style={contentStyle}>
+                {loading ? 
+                    <Skeleton/> : <Message data={data} />
+                }
+            </Content>
+            <footer>
+                
+            </footer>
+      
+        </Layout>
+    </Flex>
   );
 };
 

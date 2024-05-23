@@ -18,6 +18,15 @@ const users = [...Array(1)].map(() => {
     password: userGenerator.generateRandomPassword()}}
 );
 
+// for easier front-end testings
+users.push({
+  username:'gigacool',
+  password:'notAPassword',
+  birthDate:new Date(1980, 3, 31).getTime(),
+  firstName:'Billy',
+  lastName:'Boy'
+})
+
 const registerUser = async (user) => {
   try {
     // Register the user

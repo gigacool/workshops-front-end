@@ -2,7 +2,7 @@ import {GithubOutlined} from '@ant-design/icons'
 
 const Footer: React.FC = () => (
     <>
-        <p>Powered by sweat, brain and AI</p>
+        <p>Powered by sweat, documentation, co-creation and AI</p>
         <p>
             <a
                 target="_blank"

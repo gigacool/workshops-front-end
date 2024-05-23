@@ -7,6 +7,8 @@ import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { LoginOutlined, UserAddOutlined } from '@ant-design/icons'
 
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import FooterContent from '../components/Footer';
 
 import './index.css';
@@ -67,9 +69,14 @@ const footerStyle: React.CSSProperties = {
 // }
 
 const HomePage: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+
   const [data, setData] = useState<IQuack[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -92,8 +99,12 @@ const HomePage: React.FC = () => {
 
     fetchData();
   }, []);
-
-
+  
+  useEffect(()=>{
+    if (isAuthenticated) {
+      return navigate('/app', {replace:true});
+    }
+  }, [isAuthenticated, navigate]);
 
   if (error) {
     return <div>{error}</div>;

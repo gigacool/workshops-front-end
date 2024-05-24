@@ -30,7 +30,7 @@ const SubmitButton: React.FC<React.PropsWithChildren<SubmitButtonProps>> = ({ fo
     }, [form, values]);
   
     return (
-      <Button type="primary" htmlType="submit" disabled={!submittable}>
+      <Button type="primary" htmlType="submit" disabled={!submittable} data-testid="submit-button">
         {children}
       </Button>
     );

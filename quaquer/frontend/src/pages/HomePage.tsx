@@ -18,20 +18,23 @@ const { Header, Footer, Content } = Layout;
 
 
 interface IAuthor {
-  _id: string,
-  username: string
+  username: string;
 }
 
 interface IDataItem {
-  _id: string;
+  key: string;
   content: string;
-  author: IAuthor
+  author: IAuthor;
+  createdAt: string;
+  likes: number;
 }
 
 interface IQuack {
-  key: string,
-  content: string,
-  author: string
+  key: string;
+  content: string;
+  author: string;
+  createdAt: string;
+  likes: number;
 }
 
 const layoutStyle: React.CSSProperties = {
@@ -85,9 +88,11 @@ const HomePage: React.FC = () => {
         const data: IDataItem[] = await response.json();
         setData(data.map((item): IQuack => {
           return {
-            key: item._id,
+            key: item.key,
             content: item.content,
-            author: item.author.username
+            author: item.author.username,
+            createdAt: item.createdAt,
+            likes: item.likes
           }
         }))
         setLoading(false);
@@ -132,7 +137,7 @@ const HomePage: React.FC = () => {
           </Flex>
 
           {loading ?
-            <Skeleton /> : <Message data={data} />
+            <Skeleton /> : <Message isAuthenticated={false} data={data} />
           }
         </Content>
         <Footer style={footerStyle}>

@@ -7,7 +7,7 @@ function randInterval(min, max){
   return min + Math.floor(Math.random() *(max-min+1));
 }
 
-const users = [...Array(1)].map(() => { 
+const users = [...Array(10)].map(() => { 
   let user = userGenerator.generateRandomName();
   // may lead to inconsistencies but we don't really care at this point - it is more about providing examples
 

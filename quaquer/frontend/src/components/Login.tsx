@@ -42,15 +42,9 @@ type FieldType = {
     password?: string;
 };
 
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('success', values)
-}
-
 const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (error) => {
     console.log('failure', error)
 }
-
-
 
 export const Login: React.FC = () => {
     const { login } = useAuth();

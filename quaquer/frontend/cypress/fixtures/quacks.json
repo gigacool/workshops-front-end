@@ -1,0 +1,20 @@
+[
+  {
+    "key": 1,
+    "content": "Quack 1 content",
+    "author": {
+      "username": "Mallard" 
+    },
+    "likes": 0,
+    "createdAt": "someDate"
+  },
+  {
+    "key": 2,
+    "content": "Quack 2 content",
+    "author": {
+      "username": "Magpie" 
+    },
+    "likes": 10,
+    "createdAt": "someDate"
+  }
+]

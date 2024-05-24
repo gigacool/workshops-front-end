@@ -27,7 +27,7 @@ const imgStyle: React.CSSProperties = {
 
 const Quack: React.FC<{ quack: IQuack, isAuthenticated:boolean, onLike?:(key:string)=>{} }> = ({ quack, isAuthenticated, onLike }) => {
     return (
-        <Card hoverable style={cardStyle} styles={{ body: { padding: 0, overflow: 'hidden' } }}>
+        <Card data-testid={`quack-${quack.key}`} hoverable style={cardStyle} styles={{ body: { padding: 0, overflow: 'hidden' } }}>
             <Flex justify="left">
                 <img
                     alt="avatar"

@@ -36,7 +36,7 @@ const Quack: React.FC<{ quack: IQuack, isAuthenticated:boolean, onLike?:(key:str
                 />
                 <Flex vertical align="flex-start" style={{ padding: 10 }}>
                     
-                    <Typography.Title level={5} style={{ marginTop: 10 }}>
+                    <Typography.Title level={5} style={{ marginTop: 10, textAlign:'left' }}>
                         {quack.author}
                     </Typography.Title>
 

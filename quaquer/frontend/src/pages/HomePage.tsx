@@ -131,9 +131,11 @@ const HomePage: React.FC = () => {
                 Login
               </Button>
             </Link>
+            <Link to="/register">
             <Button icon={<UserAddOutlined />}>
               Register
             </Button>
+            </Link>
           </Flex>
 
           {loading ?

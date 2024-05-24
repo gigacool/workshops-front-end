@@ -3,16 +3,17 @@ import React, { useEffect, useState } from 'react';
 
 import { Typography } from 'antd';
 import { Flex, Layout } from 'antd';
+import { Button } from 'antd';
+import { Link } from 'react-router-dom';
+import { LoginOutlined, UserAddOutlined } from '@ant-design/icons'
 
 import FooterContent from '../components/Footer';
-import Login from '../components/Login';
+import Register from '../components/Register';
 
 import './index.css';
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
-
-
 
 
 const layoutStyle: React.CSSProperties = {
@@ -45,7 +46,11 @@ const footerStyle: React.CSSProperties = {
   backgroundColor: '#fff',
 }
 
-const LoginPage: React.FC = () => {
+// const style:React.CSSProperties = {
+//     textAlign:'center',
+// }
+
+const RegisterPage: React.FC = () => {
 
   return (
     <Flex gap="middle" wrap>
@@ -56,7 +61,7 @@ const LoginPage: React.FC = () => {
         </Header>
         <Content style={contentStyle}>
           
-            <Login />
+            <Register />
 
         </Content>
         <Footer style={footerStyle}>
@@ -68,5 +73,5 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
 

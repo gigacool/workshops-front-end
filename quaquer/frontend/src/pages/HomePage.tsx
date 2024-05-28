@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Message from '../components/Message';
 
 import { Typography } from 'antd';
@@ -11,31 +11,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import FooterContent from '../components/Footer';
 
+import { useGetQuacksQuery } from '../store/api';
+
+
 import './index.css';
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
-
-
-interface IAuthor {
-  username: string;
-}
-
-interface IDataItem {
-  key: string;
-  content: string;
-  author: IAuthor;
-  createdAt: string;
-  likes: number;
-}
-
-interface IQuack {
-  key: string;
-  content: string;
-  author: string;
-  createdAt: string;
-  likes: number;
-}
 
 const layoutStyle: React.CSSProperties = {
   overflow: 'auto',
@@ -75,35 +57,9 @@ const HomePage: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-
-  const [data, setData] = useState<IQuack[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: quacks, error, isLoading } = useGetQuacksQuery();
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/quacks');
-        const data: IDataItem[] = await response.json();
-        setData(data.map((item): IQuack => {
-          return {
-            key: item.key,
-            content: item.content,
-            author: item.author.username,
-            createdAt: item.createdAt,
-            likes: item.likes
-          }
-        }))
-        setLoading(false);
-      } catch (err) {
-        setError('Error fetching data');
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
   
   useEffect(()=>{
     if (isAuthenticated) {
@@ -112,7 +68,7 @@ const HomePage: React.FC = () => {
   }, [isAuthenticated, navigate]);
 
   if (error) {
-    return <div>{error}</div>;
+    return <div>{error.toString()}</div>;
   }
 
   return (
@@ -136,8 +92,8 @@ const HomePage: React.FC = () => {
             </Button>
           </Flex>
 
-          {loading ?
-            <Skeleton /> : <Message isAuthenticated={false} data={data} />
+          {isLoading ?
+            <Skeleton /> : <Message isAuthenticated={false} data={quacks ? quacks : []} />
           }
         </Content>
         <Footer style={footerStyle}>

@@ -10,31 +10,14 @@ import FooterContent from '../components/Footer';
 
 import MessageWritter from '../components/MessageWritter';
 
+import { useGetQuacksQuery } from '../store/api';
+
+
 import './index.css';
 
 const { Title } = Typography;
 const { Header, Footer, Content } = Layout;
 
-
-interface IAuthor {
-  username: string;
-}
-
-interface IDataItem {
-  key: string;
-  content: string;
-  author: IAuthor;
-  createdAt: string;
-  likes: number;
-}
-
-interface IQuack {
-  key: string;
-  content: string;
-  author: string;
-  createdAt: string;
-  likes: number;
-}
 
 const layoutStyle: React.CSSProperties = {
   overflow: 'auto',
@@ -73,34 +56,21 @@ const footerStyle: React.CSSProperties = {
 
 
 const HomePage: React.FC = () => {
-  const { isAuthenticated, token } = useAuth();
-  const navigate = useNavigate();
+  const { token } = useAuth();
 
+  const { data: quacks, error, isLoading, refetch } = useGetQuacksQuery();
 
-  const [data, setData] = useState<IQuack[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [fetchTrigger, setFetchTrigger] = useState<boolean>(false); 
 
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch('/api/quacks');
-      const data: IDataItem[] = await response.json();
-      setData(data.map((item): IQuack => {
-        return {
-          key: item.key,
-          content: item.content,
-          author: item.author.username,
-          createdAt: item.createdAt,
-          likes: item.likes
-        }
-      }))
-      setLoading(false);
-    } catch (err) {
-      setError('Error fetching data');
-      setLoading(false);
+  useEffect(() => {
+    if (fetchTrigger) {
+      refetch();
+      setFetchTrigger(false);
     }
+  }, [fetchTrigger, refetch]);
+
+  const handleRefetch = () => {
+    setFetchTrigger(true);
   };
 
   const onLike = async (key:string) => {
@@ -113,26 +83,14 @@ const HomePage: React.FC = () => {
         },
       });
       setFetchTrigger((prev) => !prev);
-      
      
     } catch (err) {
-      setError('Error fetching data');
-      setLoading(false);
+      // nop
     }
   }
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchTrigger]);
-  
-  useEffect(()=>{
-    if (isAuthenticated) {
-      return navigate('/app', {replace:true});
-    }
-  }, [isAuthenticated, navigate]);
-
   if (error) {
-    return <div>{error}</div>;
+    return <div>{error.toString()}</div>;
   }
 
   return (
@@ -144,11 +102,11 @@ const HomePage: React.FC = () => {
         </Header>
         <Content style={contentStyle}>
           <Flex gap="middle" justify="center" align="center">
-            <MessageWritter token={token} onMessagePublished={fetchData}></MessageWritter>
+            <MessageWritter token={token} onMessagePublished={handleRefetch}></MessageWritter>
           </Flex>
 
-          {loading ?
-            <Skeleton /> : <Message isAuthenticated data={data} onLike={onLike} />
+          {isLoading ?
+            <Skeleton /> : <Message isAuthenticated data={quacks ? quacks : []} onLike={onLike} />
           }
         </Content>
         <Footer style={footerStyle}>

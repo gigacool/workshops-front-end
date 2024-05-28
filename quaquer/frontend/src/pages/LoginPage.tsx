@@ -1,22 +1,10 @@
-import React, { useEffect, useState } from 'react';
-
-
 import { Typography } from 'antd';
 import { Flex, Layout } from 'antd';
-import { Button } from 'antd';
-import { Link } from 'react-router-dom';
-import { LoginOutlined, UserAddOutlined } from '@ant-design/icons'
 
 import FooterContent from '../components/Footer';
 import Login from '../components/Login';
 
 import './index.css';
-
-const { Title } = Typography;
-const { Header, Footer, Content } = Layout;
-
-
-
 
 const layoutStyle: React.CSSProperties = {
   overflow: 'auto',
@@ -41,40 +29,26 @@ const contentStyle: React.CSSProperties = {
   minHeight: 600,
 }
 
-
 const footerStyle: React.CSSProperties = {
   textAlign: 'center',
   color: '#666',
   backgroundColor: '#fff',
 }
 
-// const style:React.CSSProperties = {
-//     textAlign:'center',
-// }
-
 const HomePage: React.FC = () => {
-
-
-
-
-
-
   return (
     <Flex gap="middle" wrap>
       <Layout style={layoutStyle}>
-        <Header style={headerStyle}>
-          <Title>Quacker</Title>
+        <Layout.Header style={headerStyle}>
+          <Typography.Title>Quacker</Typography.Title>
           <h4>The place to quack</h4>
-        </Header>
-        <Content style={contentStyle}>
-          
+        </Layout.Header>
+        <Layout.Content style={contentStyle}>
             <Login />
-
-        </Content>
-        <Footer style={footerStyle}>
+        </Layout.Content>
+        <Layout.Footer style={footerStyle}>
           <FooterContent />
-        </Footer>
-
+        </Layout.Footer>
       </Layout>
     </Flex>
   );

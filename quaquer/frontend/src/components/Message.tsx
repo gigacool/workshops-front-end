@@ -25,7 +25,7 @@ const imgStyle: React.CSSProperties = {
     marginTop: 10
 };
 
-const Quack: React.FC<{ quack: IQuack, isAuthenticated:boolean, onLike?:(key:string)=>{} }> = ({ quack, isAuthenticated, onLike }) => {
+const Quack: React.FC<{ quack: IQuack, isAuthenticated:boolean, onLike:(key:string)=> unknown }> = ({ quack, isAuthenticated, onLike }) => {
     return (
         <Card data-testid={`quack-${quack.key}`} hoverable style={cardStyle} styles={{ body: { padding: 0, overflow: 'hidden' } }}>
             <Flex justify="left">
@@ -55,11 +55,11 @@ const Quack: React.FC<{ quack: IQuack, isAuthenticated:boolean, onLike?:(key:str
     )
 }
 
-const Messages: React.FC<{ data: IQuack[], isAuthenticated:boolean, onLike:(key:string)=>{} }> = ({ data, isAuthenticated, onLike }) => (
+const Messages: React.FC<{ data: IQuack[], isAuthenticated:boolean, onLike?:(key:string)=> unknown }> = ({ data, isAuthenticated, onLike }) => (
     <div style={{marginTop:60}} >
         {data
             .filter((_quack, index) => (isAuthenticated ? true:index < 3))
-            .map((quack) => (<Quack key={quack.key} quack={quack} isAuthenticated={isAuthenticated} onLike={onLike} />))}
+            .map((quack) => (<Quack key={quack.key} quack={quack} isAuthenticated={isAuthenticated} onLike={onLike ? onLike:()=>{}} />))}
         {isAuthenticated ? null : (
             <Card hoverable style={cardStyle} styles={{ body: { padding: 10, overflow: 'hidden' } }}>
                 <Link to="/login">

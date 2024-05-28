@@ -20,6 +20,7 @@ interface IQuack {
   likes: number;
 }
 
+const QUACKS_TAG = 'QUACKS'
 const getToken = () => {
   return sessionStorage.getItem('authToken');
 };
@@ -36,6 +37,7 @@ export const api = createApi({
       return headers;
     },
   }),
+  tagTypes: [QUACKS_TAG],
   endpoints: (builder) => ({
     getQuacks: builder.query<IQuack[], void>({
       query: () => 'quacks',
@@ -50,9 +52,17 @@ export const api = createApi({
           }
         })
       },
+      providesTags: [QUACKS_TAG],
     }),
+    likeQuack: builder.mutation<void, string>({
+      query: (quackKey) => ({
+        url :`quacks/${quackKey}/like`,
+        method: 'POST'
+      }),
+      invalidatesTags: [QUACKS_TAG]
+    })
   }),
 });
 
 // Export hooks for usage in functional components
-export const { useGetQuacksQuery } = api;
+export const { useGetQuacksQuery, useLikeQuackMutation } = api;

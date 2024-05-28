@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import Message from '../components/Message';
+import React from 'react';
+import Messages from '../components/Messages';
 
 import { Typography } from 'antd';
 import { Flex, Layout, Skeleton } from 'antd';
 
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import FooterContent from '../components/Footer';
 
@@ -58,36 +57,8 @@ const footerStyle: React.CSSProperties = {
 const HomePage: React.FC = () => {
   const { token } = useAuth();
 
-  const { data: quacks, error, isLoading, refetch } = useGetQuacksQuery();
+  const { data: quacks = [], error, isLoading, refetch } = useGetQuacksQuery();
 
-  const [fetchTrigger, setFetchTrigger] = useState<boolean>(false); 
-
-  useEffect(() => {
-    if (fetchTrigger) {
-      refetch();
-      setFetchTrigger(false);
-    }
-  }, [fetchTrigger, refetch]);
-
-  const handleRefetch = () => {
-    setFetchTrigger(true);
-  };
-
-  const onLike = async (key:string) => {
-    try {
-      await fetch(`/api/quacks/${key}/like`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      setFetchTrigger((prev) => !prev);
-     
-    } catch (err) {
-      // nop
-    }
-  }
 
   if (error) {
     return <div>{error.toString()}</div>;
@@ -102,11 +73,11 @@ const HomePage: React.FC = () => {
         </Header>
         <Content style={contentStyle}>
           <Flex gap="middle" justify="center" align="center">
-            <MessageWritter token={token} onMessagePublished={handleRefetch}></MessageWritter>
+            <MessageWritter token={token} onMessagePublished={refetch}></MessageWritter>
           </Flex>
 
           {isLoading ?
-            <Skeleton /> : <Message isAuthenticated data={quacks ? quacks : []} onLike={onLike} />
+            <Skeleton /> : <Messages isAuthenticated data={quacks} />
           }
         </Content>
         <Footer style={footerStyle}>

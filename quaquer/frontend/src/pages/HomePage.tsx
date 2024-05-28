@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Message from '../components/Message';
+import Messages from '../components/Messages';
 
 import { Typography } from 'antd';
 import { Flex, Layout, Skeleton } from 'antd';
@@ -93,7 +93,7 @@ const HomePage: React.FC = () => {
           </Flex>
 
           {isLoading ?
-            <Skeleton /> : <Message isAuthenticated={false} data={quacks ? quacks : []} />
+            <Skeleton /> : <Messages isAuthenticated={false} data={quacks ? quacks : []} />
           }
         </Content>
         <Footer style={footerStyle}>

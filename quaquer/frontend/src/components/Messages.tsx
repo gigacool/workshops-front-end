@@ -4,6 +4,7 @@ import { Button, Card, Flex, Typography } from 'antd';
 
 import { Link } from 'react-router-dom';
 import { LoginOutlined } from '@ant-design/icons'
+import { useLikeQuackMutation } from '../store/api';
 
 interface IQuack {
     key: string,
@@ -25,7 +26,10 @@ const imgStyle: React.CSSProperties = {
     marginTop: 10
 };
 
-const Quack: React.FC<{ quack: IQuack, isAuthenticated:boolean, onLike:(key:string)=> unknown }> = ({ quack, isAuthenticated, onLike }) => {
+const Quack: React.FC<{ quack: IQuack, isAuthenticated:boolean}> = ({ quack, isAuthenticated }) => {
+    const [likeQuack, likeQuackResult] = useLikeQuackMutation()
+
+    
     return (
         <Card data-testid={`quack-${quack.key}`} hoverable style={cardStyle} styles={{ body: { padding: 0, overflow: 'hidden' } }}>
             <Flex justify="left">
@@ -49,17 +53,17 @@ const Quack: React.FC<{ quack: IQuack, isAuthenticated:boolean, onLike:(key:stri
                
             </Flex>
             <Flex justify="right" align="flex-end"  style={{ padding: 0 }}>
-                <Button type="text" disabled={!isAuthenticated} onClick={()=>{onLike(quack.key)}}><HeartTwoTone /> {quack.likes}</Button>
+                <Button type="text" disabled={!isAuthenticated} onClick={()=>{likeQuack(quack.key)}}><HeartTwoTone /> {quack.likes}</Button>
             </Flex>
         </Card>
     )
 }
 
-const Messages: React.FC<{ data: IQuack[], isAuthenticated:boolean, onLike?:(key:string)=> unknown }> = ({ data, isAuthenticated, onLike }) => (
+const Messages: React.FC<{ data: IQuack[], isAuthenticated:boolean }> = ({ data, isAuthenticated }) => (
     <div style={{marginTop:60}} >
         {data
             .filter((_quack, index) => (isAuthenticated ? true:index < 3))
-            .map((quack) => (<Quack key={quack.key} quack={quack} isAuthenticated={isAuthenticated} onLike={onLike ? onLike:()=>{}} />))}
+            .map((quack) => (<Quack key={quack.key} quack={quack} isAuthenticated={isAuthenticated} />))}
         {isAuthenticated ? null : (
             <Card hoverable style={cardStyle} styles={{ body: { padding: 10, overflow: 'hidden' } }}>
                 <Link to="/login">

@@ -6,6 +6,9 @@ const authMiddleware = require('../middleware/authMiddleware');
 // Create a new quack
 router.post('/', authMiddleware, quackController.createquack);
 
+// Like a quack
+router.post('/:quackId/like', authMiddleware, quackController.likeQuack);
+
 // Get all quacks
 router.get('/', quackController.getAllquacks);
 

@@ -18,9 +18,50 @@ exports.createquack = async (req, res) => {
 exports.getAllquacks = async (req, res) => {
   try {
     const quacks = await Quack.find().populate('author', 'username').sort({ createdAt: -1 });
-    res.status(200).json(quacks);
+    
+    res.status(200).json(
+      quacks.map((quack) =>(
+        {
+        key:quack._id,
+        content: quack.content,
+        author: {
+          username:quack.author.username
+        },
+        likes: quack.likes.length,
+        createdAt: quack.createdAt
+        }
+
+      ))
+    );
   } catch (error) {
+    console.error(error)
     res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.likeQuack = async (req, res) => {
+  try {
+    const { quackId } = req.params;
+    const userId = req.user.id; 
+
+    const quack = await Quack.findById(quackId);
+    if (!quack) {
+      return res.status(404).json({ message: 'Quack not found' });
+    }
+
+    // toggle the like
+    const position = quack.likes.indexOf(userId);
+    if (position >= 0){
+      quack.likes.splice(position, 1);
+    } else {
+      quack.likes.push(userId);
+    }
+    await quack.save();
+
+    res.status(201).send();
+  } catch (error) {
+    res.status(500).json({ message: 'Could not like' });
   }
 };
 

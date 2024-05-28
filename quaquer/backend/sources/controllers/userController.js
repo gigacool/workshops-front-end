@@ -18,3 +18,23 @@ exports.getUserProfile = async (req, res) => {
     res.status(500).send(error.message);
   }
 };
+
+exports.getAuthentifiedProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = await User.findOne({ _id:userId });
+    if (!user) {
+      return res.status(401).send();
+    }
+    res.json({
+      isSelf: req.user.id == user._id.toString() ? true:undefined,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      birthDate: user.birthDate
+    });
+
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+}

@@ -1,41 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Input, Button, message } from 'antd';
+import { usePublishQuackMutation } from '../store/api';
 
 interface MessageWritterProps {
-    token: string | null;
-    onMessagePublished: () => void;
 }
 
-const MessageWritter: React.FC<MessageWritterProps> = ({ token, onMessagePublished }) => {
+const MessageWritter: React.FC<MessageWritterProps> = () => {
   const [form] = Form.useForm();
 
-  const handlePublishMessage = async (values: { content: string }) => {
-    try {
-      const response = await fetch('/api/quacks', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(values),
-      });
+  const [publishQuack, publishQuackResult] = usePublishQuackMutation()
 
-      if (!response.ok) {
-        throw new Error('Failed to publish message');
-      }
 
+  useEffect(() => {
+    if(publishQuackResult.isError){
+      message.error('Failed to publish message');
+    } else if(publishQuackResult.isSuccess){
       message.success('Message published successfully');
       form.resetFields();
-      onMessagePublished(); // Notify parent component to refresh the content
-    } catch (error) {
-      message.error('Failed to publish message');
     }
-  };
+  }, [publishQuackResult]) 
 
   return (
     <Form 
         form={form} 
-        onFinish={handlePublishMessage}
+        onFinish={publishQuack}
         labelCol={{ span: 24 }}
         wrapperCol={{ span: 24 }}
         style={{ minWidth:480, maxWidth: 600 }}

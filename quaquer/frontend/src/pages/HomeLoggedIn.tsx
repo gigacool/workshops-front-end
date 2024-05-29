@@ -4,7 +4,6 @@ import Messages from '../components/Messages';
 import { Typography } from 'antd';
 import { Flex, Layout, Skeleton } from 'antd';
 
-import { useAuth } from '../contexts/AuthContext';
 import FooterContent from '../components/Footer';
 
 import MessageWritter from '../components/MessageWritter';
@@ -55,10 +54,8 @@ const footerStyle: React.CSSProperties = {
 
 
 const HomePage: React.FC = () => {
-  const { token } = useAuth();
 
-  const { data: quacks = [], error, isLoading, refetch } = useGetQuacksQuery();
-
+  const { data: quacks = [], error, isLoading } = useGetQuacksQuery();
 
   if (error) {
     return <div>{error.toString()}</div>;
@@ -73,7 +70,7 @@ const HomePage: React.FC = () => {
         </Header>
         <Content style={contentStyle}>
           <Flex gap="middle" justify="center" align="center">
-            <MessageWritter token={token} onMessagePublished={refetch}></MessageWritter>
+            <MessageWritter/>
           </Flex>
 
           {isLoading ?

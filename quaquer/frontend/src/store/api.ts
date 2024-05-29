@@ -60,9 +60,17 @@ export const api = createApi({
         method: 'POST'
       }),
       invalidatesTags: [QUACKS_TAG]
+    }),
+    publishQuack: builder.mutation<void, { content: string }>({
+      query: (content) =>({
+        url: 'quacks',
+        method: 'POST',
+        body : content
+      }),
+      invalidatesTags: [QUACKS_TAG]
     })
-  }),
+  })
 });
 
 // Export hooks for usage in functional components
-export const { useGetQuacksQuery, useLikeQuackMutation } = api;
+export const { useGetQuacksQuery, useLikeQuackMutation, usePublishQuackMutation } = api;

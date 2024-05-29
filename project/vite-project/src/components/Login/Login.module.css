@@ -1,0 +1,35 @@
+.login {
+    border: solid thin #777;
+    border-radius: 10px;
+    padding: 10px;
+
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.information {
+
+}
+
+@media (max-width: 768px) {
+    .login {
+        max-width: 90%;
+        padding: 15px;
+    }
+
+    .information {
+        font-size: large;
+    }
+}
+
+@media (max-width: 480px) {
+    .login {
+        max-width: 100%;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    .information {
+        display: none;
+    }
+}

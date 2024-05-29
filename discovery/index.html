@@ -1,0 +1,78 @@
+
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Document</title>
+            <link rel="stylesheet" href="screen.css">
+
+        </head>
+
+            <script>
+
+                const initialData = {"collection":[0,1,2,3,4,5,6,7,8,9],"map":{"0":{"id":0,"value":81.62444126613578,"count":19},"1":{"id":1,"value":20.0218665752524,"count":533},"2":{"id":2,"value":17.093069109204116,"count":24},"3":{"id":3,"value":36.86531128246773,"count":402},"4":{"id":4,"value":47.88195202355345,"count":226},"5":{"id":5,"value":36.62217992232164,"count":223},"6":{"id":6,"value":3.4548690680296756,"count":363},"7":{"id":7,"value":35.490465867477575,"count":270},"8":{"id":8,"value":15.42220378836916,"count":30},"9":{"id":9,"value":7.119502994547533,"count":453}}};
+                let sortedData = initialData;
+                let sortOrder = '';
+                function sort(key){
+                    if (sortOrder == 'asc'){
+                        sortedData.collection  = initialData.collection.sort((a, b) => {
+                            return initialData.map[b][key] - initialData.map[a][key];
+                        })
+                        sortOrder = 'desc'
+                    }
+                    else {
+                        sortedData.collection  = initialData.collection.sort((a, b) => {
+                            return initialData.map[a][key] - initialData.map[b][key];
+                        }) 
+                        sortOrder = 'asc'
+                    }
+                    renderArrayContent(sortedData);
+                }
+
+                function transform(data){
+                    return `
+                    <tbody>
+                    ${data.collection.map((id)=> {
+                        return `
+                            <tr>    
+                                <td>${id}</td>
+                                <td>${data.map[id].value}</td>
+                                <td>${data.map[id].count}</td>
+                            </tr>
+                        `
+                    }).join('')}
+                    </tbody>
+                `;
+                }
+
+                function renderArrayContent(data){
+                    let tbody = document.querySelector('#tablebody');
+                    tbody.innerHTML = transform(sortedData);
+                }
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    renderArrayContent(initialData)
+                })
+            </script>
+
+
+            <body>
+                <table id="myTable"> 
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th onclick="sort('value')">value</th>
+                            <th onclick="sort('count')">count</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablebody">
+                    
+                        
+                    </tbody>
+                </table>
+            
+            </body>
+        </html>
+    
+    
